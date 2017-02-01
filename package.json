@@ -1,0 +1,23 @@
+{
+  "name": "ruter-alexa-skill",
+  "version": "1.0.0",
+  "description": "Ask Alexa when next tram north or south (from Stensgata) is.",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.14.1",
+    "moment": "^2.17.1",
+    "node-fetch": "^1.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ruter",
+    "alexa",
+    "api"
+  ],
+  "author": "Gareth Oates (goatie@gmail.com)",
+  "license": "MIT"
+}

@@ -10,9 +10,8 @@ exports.getLatestTramTimes = (lines) => {
     _lines = lines;
 
     return fetch(baseUrl + path + lines)
-        .then(res => { return res.json(); })
-        .then(getAllJourneyData)
-        .then(filterJourneyData);
+        .then(convertToJSON)
+        .then(getAllJourneyData);
 };
 
 function getAllJourneyData(response) {
@@ -27,8 +26,7 @@ function getAllJourneyData(response) {
 
     response.forEach(item => {
         var rawData      = item.MonitoredVehicleJourney,
-            date         = new Date(rawData.MonitoredCall.ExpectedArrivalTime);
-            timeArriving = moment(date),
+            timeArriving = moment(new Date(rawData.MonitoredCall.ExpectedArrivalTime));
             difference   = moment(timeArriving).fromNow(true).replace('ute', ''),
 
             journey = {
@@ -61,30 +59,26 @@ function getAllJourneyData(response) {
 
 
     journeys = {
-        'platformOne': {
+        'platformOne' : {
             'lineOne' : platformOneLineOne,
-            'lineTwo'  : platformOneLineTwo
+            'lineTwo' : platformOneLineTwo
         },
-        'platformTwo': {
+        'platformTwo' : {
             'lineOne' : platformTowLineOne,
-            'lineTwo'  : platformTwoLineTwo
+            'lineTwo' : platformTwoLineTwo
         }
     };
 
     return journeys;
 }
 
-function filterJourneyData(journeys) {
-    if (journeys.length === 0) {
-        return;
-    }
-
-    return journeys
-}
-
 function filterByPlatformAndLine (journey, platform, line) {
     var samePlatform = journey.platform === platform.toString(),
-        sameLine = journey.line === line.toString();
+        sameLine     = journey.line     === line.toString();
 
     return samePlatform && sameLine;
+}
+
+function convertToJSON(response) {
+    return response.json();
 }

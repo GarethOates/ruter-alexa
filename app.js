@@ -3,8 +3,6 @@ var ruterService = require('./ruterService.js'),
     express      = require('express'),
     app          = express();
 
-//app.use(express.static(path.join(__dirname + '/public')));
-
 app.get('/api/:lines', function (req, res) {
     var lines = req.params.lines;
 

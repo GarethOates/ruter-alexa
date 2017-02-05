@@ -12,14 +12,16 @@ function init() {
 }
 
 function getData(lines) {
-    if (lines) {
-        fetch('/api/' + lines)
-            .then(function (response) { return response.json();})
-            .then(function (body) {
-                timetable.update(body);
-            }
-        );
+    if (!lines) {
+        lines = "17,18";
     }
+
+    fetch('/api/' + lines)
+        .then(function (response) { return response.json();})
+        .then(function (body) {
+            timetable.update(body);
+        }
+    );
 }
 
 function getUrlParameter(name) {

@@ -7,15 +7,16 @@
         <article>
             <h2>Platform 1</h2>
 
-            <div if={data.platformOne.lineOne.length > 0}>
-                <h3>17 { data.platformOne.lineOne[0].destination}</h3>
-
-                <ul>
-                    <li each={journey in data.platformOne.lineOne}>
-                        <span class="timeUntil">{journey.timeUntil}</span>
-                        <span class="arrivalTime">{journey.arrivalTime}</span>
-                    </li>
-                </ul>
+            <div class="panel panel-default" if={data.platformOne.lineOne.length}>
+                <div class="panel-heading">
+                    17 { data.platformOne.lineOne[0].destination}
+                </div>
+                <table class="table">
+                    <tr each={journey in data.platformOne.lineOne}>
+                        <td class="timeUntil">{journey.timeUntil}</td>
+                        <td class="arrivalTime">{journey.arrivalTime}</td>
+                    </tr>
+                </table>
             </div>
 
             <div if={data.platformOne.lineTwo.length > 0}>

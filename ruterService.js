@@ -27,7 +27,7 @@ function getAllJourneyData(response) {
     response.forEach(item => {
         var rawData      = item.MonitoredVehicleJourney,
             timeArriving = moment(new Date(rawData.MonitoredCall.ExpectedArrivalTime));
-            difference   = moment(timeArriving).fromNow(true).replace('ute', ''),
+            difference   = moment(timeArriving).fromNow(true).replace('ute', '').replace('a', '1'),
 
             journey = {
                 'line'       : rawData.LineRef,
@@ -74,7 +74,7 @@ function getAllJourneyData(response) {
 
 function filterByPlatformAndLine (journey, platform, line) {
     var samePlatform = journey.platform === platform.toString(),
-        sameLine     = journey.line     === line.toString();
+        sameLine     = journey.line === line.toString();
 
     return samePlatform && sameLine;
 }

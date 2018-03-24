@@ -2,27 +2,20 @@ var fetch   = require('node-fetch'),
     moment  = require('moment'),
 
     baseUrl = 'https://reisapi.ruter.no/',
-    path    = 'StopVisit/GetDepartures/3010313?transporttypes=tram&linenames=',
+    path    = 'StopVisit/GetDepartures/3010011?transporttypes=metro&linenames=',
 
-    _lines;
+    _line;
 
-exports.getLatestTramTimes = (lines) => {
-    _lines = lines;
+exports.getLatestTramTimes = (line) => {
+    _line = line;
 
-    return fetch(baseUrl + path + lines)
-        .then(convertToJSON)
+    return fetch(baseUrl + path + line)
+        .then((response) => response.json())
         .then(getAllJourneyData);
 };
 
 function getAllJourneyData(response) {
-    var platformOneLineOne,
-        platformOneLineTwo,
-        platformTowLineOne,
-        platformTwoLineTwo,
-        journeys = [];
-
-        lineOne = _lines.split(',')[0],
-        lineTwo = _lines.split(',')[1];
+    const journeys = [];
 
     response.forEach(item => {
         var rawData      = item.MonitoredVehicleJourney,
@@ -39,46 +32,8 @@ function getAllJourneyData(response) {
             };
 
         journeys.push(journey);
+
     });
-
-    platformOneLineOne = journeys.filter(function (item) {
-        return filterByPlatformAndLine(item, 1, lineOne);
-    });
-
-    platformOneLineTwo = journeys.filter(function (item) {
-        return filterByPlatformAndLine(item, 1, lineTwo);
-    });
-
-    platformTowLineOne = journeys.filter(function (item) {
-        return filterByPlatformAndLine(item, 2, lineOne);
-    });
-
-    platformTwoLineTwo = journeys.filter(function (item) {
-        return filterByPlatformAndLine(item, 2, lineTwo);
-    });
-
-
-    journeys = {
-        'platformOne' : {
-            'lineOne' : platformOneLineOne,
-            'lineTwo' : platformOneLineTwo
-        },
-        'platformTwo' : {
-            'lineOne' : platformTowLineOne,
-            'lineTwo' : platformTwoLineTwo
-        }
-    };
 
     return journeys;
-}
-
-function filterByPlatformAndLine (journey, platform, line) {
-    var samePlatform = journey.platform === platform.toString(),
-        sameLine     = journey.line === line.toString();
-
-    return samePlatform && sameLine;
-}
-
-function convertToJSON(response) {
-    return response.json();
 }

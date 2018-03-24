@@ -7,10 +7,7 @@ app.get('/api/:lines', function (req, res) {
     var lines = req.params.lines;
 
     ruterService.getLatestTramTimes(lines).then((data) => {
-        res.send({
-            'stop': 'Stensgata',
-            'data': data
-        });
+        res.send({data});
     });
 });
 

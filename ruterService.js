@@ -3,9 +3,9 @@ var fetch   = require('node-fetch'),
 
     baseUrl = 'https://reisapi.ruter.no/',
     stopId = '3011310',
-    path    = 'StopVisit/GetDepartures/' + stopId + '?transporttypes=metro&linenames=',
+    path    = 'StopVisit/GetDepartures/' + stopId + '?transporttypes=metro&linenames=';
 
-exports.getLatestTramTimes = (line) => {
+module.exports.getLatestTramTimes = (line) => {
     _line = line;
 
     return fetch(baseUrl + path + line)
@@ -17,21 +17,25 @@ function getAllJourneyData(response) {
     const journeys = [];
 
     response.forEach(item => {
-        var rawData      = item.MonitoredVehicleJourney,
-            timeArriving = moment(new Date(rawData.MonitoredCall.ExpectedArrivalTime));
-            difference   = moment(timeArriving).fromNow(true).replace('ute', '').replace('a', '1'),
+        let direction;
+        let rawData = item.MonitoredVehicleJourney;
+        let timeArriving = moment(new Date(rawData.MonitoredCall.ExpectedArrivalTime));
+        let difference = moment(timeArriving).fromNow(true); //.replace('ute', '').replace('a', '1');
 
-            journey = {
-                'line'       : rawData.LineRef,
-                'color'      : '#' + item.Extensions.LineColour,
-                'destination': rawData.MonitoredCall.DestinationDisplay,
-                'platform'   : rawData.DirectionRef,
-                'arrivalTime': timeArriving.format('HH:mm'),
-                'timeUntil'  : difference
-            };
+        if (rawData.DirectionRef === "1") {
+            direction = "East"
+        } else {
+            direction = "West"
+        }
+
+        let journey = {
+            'direction'  : direction,
+            'destination': rawData.MonitoredCall.DestinationDisplay,
+            'platform'   : rawData.DirectionRef,
+            'timeUntil'  : difference
+        };
 
         journeys.push(journey);
-
     });
 
     return {journeys};

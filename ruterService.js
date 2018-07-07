@@ -2,9 +2,8 @@ var fetch   = require('node-fetch'),
     moment  = require('moment'),
 
     baseUrl = 'https://reisapi.ruter.no/',
-    path    = 'StopVisit/GetDepartures/3010011?transporttypes=metro&linenames=',
-
-    _line;
+    stopId = '3011310',
+    path    = 'StopVisit/GetDepartures/' + stopId + '?transporttypes=metro&linenames=',
 
 exports.getLatestTramTimes = (line) => {
     _line = line;
@@ -35,5 +34,5 @@ function getAllJourneyData(response) {
 
     });
 
-    return journeys;
+    return {journeys};
 }
